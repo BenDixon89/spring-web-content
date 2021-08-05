@@ -23,16 +23,11 @@ jobs:
           name: Test
           command: mvn test
       - run:
-          name: Package
-          command: mvn package
-      - setup_remote_docker:
-          docker_layer_caching: false
-      - run:
-          name: Build and push Docker image
-          command: |
+          name: Package and Build Docker Image
+          command: mvn package |
             docker build -t bendixon89/$IMAGE_NAME:0.1.${CIRCLE_BUILD_NUM} .
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-            docker push bendixon89/$IMAGE_NAME:0.1.${CIRCLE_BUILD_NUM}    
+            docker push bendixon89/$IMAGE_NAME:0.1.${CIRCLE_BUILD_NUM}
 
 workflows:
   # Below is the definition of your workflow.
