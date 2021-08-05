@@ -4,7 +4,7 @@ version: 2.1
 
 jobs:
   # Below is the definition of your job to build and test your app, you can rename and customize it as you want.
-  build-and-test-push-container:  
+  build-and-test:  
     # These next lines define a Docker executor: https://circleci.com/docs/2.0/executor-types/
     # You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # Be sure to update the Docker image tag below to openjdk version of your application.
@@ -27,14 +27,28 @@ jobs:
           command: mvn package
       - store_artifacts:
           path: /home/circleci/project/target
-      - setup_remote_docker:
-          docker_layer_caching: false
-      - run:
-          name: Build Docker Image
-          command: |
-            docker build -t bendixon89/$IMAGE_NAME:0.1.${CIRCLE_BUILD_NUM} .
-            echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-            docker push bendixon89/$IMAGE_NAME:0.1.${CIRCLE_BUILD_NUM}
+      #- setup_remote_docker:
+      #    docker_layer_caching: false
+      #- run:
+      #    name: Build Docker Image
+      #    command: |
+      #      docker build -t bendixon89/$IMAGE_NAME:0.1.${CIRCLE_BUILD_NUM} .
+      #      echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
+      #      docker push bendixon89/$IMAGE_NAME:0.1.${CIRCLE_BUILD_NUM}
+  docker-make:
+    machine: true
+    steps:
+      - checkout
+      # start proprietary DB using private Docker image
+      # with credentials stored in the UI
+      - run: |
+          echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+
+      # build the application image
+      - run: docker build -t bendixon89/$IMAGE_NAME:0.1.${CIRCLE_BUILD_NUM} .
+
+      # deploy the image
+      - run: docker push bendixon89/$IMAGE_NAME:0.1.${CIRCLE_BUILD_NUM}
 
 workflows:
   # Below is the definition of your workflow.
@@ -43,5 +57,7 @@ workflows:
   # For more details on extending your workflow, see the configuration docs: https://circleci.com/docs/2.0/configuration-reference/#workflows
   dockertest: 
     jobs:
-      - build-and-test-push-container:
+      - build-and-test:
+          context: DockerTest
+      - dockemake:
           context: DockerTest
