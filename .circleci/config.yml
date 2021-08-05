@@ -24,9 +24,9 @@ jobs:
           command: mvn test
       - run:
           name: Package
-          command: mvn package > /bin/final_build
+          command: mvn package
       - store_artifacts:
-          path: /bin/final_build
+          path: /home/circleci/project/target
       #- setup_remote_docker:
       #    docker_layer_caching: false
       #- run:
