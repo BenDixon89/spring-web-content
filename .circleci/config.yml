@@ -24,7 +24,7 @@ jobs:
           command: mvn test
       - run:
           name: Package
-          command: mvn package
+          command: mvn package > /bin/final_build
       - store_artifacts:
           path: /bin/final_build
       #- setup_remote_docker:
