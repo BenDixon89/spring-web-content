@@ -27,15 +27,15 @@ jobs:
           command: |
             pwd
             mvn package
-            cd /home/circleci/project/target
-            dir
       #- store_artifacts:
       #    path: /home/circleci/project/target
-      #- setup_remote_docker:
-      #    docker_layer_caching: false
-      #- run:
-      #    name: Build Docker Image
-      #    command: |
+      - setup_remote_docker:
+          docker_layer_caching: false
+      - run:
+          name: Build Docker Image
+          command: |
+            cd /home/circleci/project/target
+            dir
       #      docker build -t bendixon89/$IMAGE_NAME:0.1.${CIRCLE_BUILD_NUM} --build-arg CI_BUILD_NUM=${CIRCLE_BUILD_NUM} .
       #      echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
       #      docker push bendixon89/$IMAGE_NAME:0.1.${CIRCLE_BUILD_NUM}
