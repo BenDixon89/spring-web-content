@@ -25,7 +25,6 @@ jobs:
       - run:
           name: Package
           command: |
-            pwd
             mvn package
       #- store_artifacts:
       #    path: /home/circleci/project/target
@@ -36,9 +35,9 @@ jobs:
           command: |
             cd /home/circleci/project/target
             dir
-      #      docker build -t bendixon89/$IMAGE_NAME:0.1.${CIRCLE_BUILD_NUM} --build-arg CI_BUILD_NUM=${CIRCLE_BUILD_NUM} .
-      #      echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-      #      docker push bendixon89/$IMAGE_NAME:0.1.${CIRCLE_BUILD_NUM}
+            docker build -t bendixon89/$IMAGE_NAME:0.1.${CIRCLE_BUILD_NUM} .
+            echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
+            docker push bendixon89/$IMAGE_NAME:0.1.${CIRCLE_BUILD_NUM}
   #docker-make:
   #  machine: true
   #  steps:
