@@ -27,7 +27,7 @@ jobs:
           command: |
             pwd
             mvn package
-            cd home/circleci/project/target
+            cd ./home/circleci/project/target
             dir
       #- store_artifacts:
       #    path: /home/circleci/project/target
