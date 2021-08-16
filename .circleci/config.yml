@@ -52,7 +52,7 @@ jobs:
           aws-region: AWS_DEFAULT_REGION
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
       - aws-ecs/update-task-definition:
-          container-image-name-updates: 'container=web-server-task,image-and-tag=bendixon89/$IMAGE_NAME:0.1.${CIRCLE_BUILD_NUM-1}'
+          container-image-name-updates: 'container=web-server-task,image-and-tag=bendixon89/$IMAGE_NAME:0.1.${CIRCLE_PREVIOUS_BUILD_NUM}'
           family: 'first-run-task-definition'
 workflows:
   # Below is the definition of your workflow.
