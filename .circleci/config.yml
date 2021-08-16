@@ -65,8 +65,8 @@ jobs:
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
       - aws-ecs/update-service:
           cluster-name: 'default'
-          container-image-name-updates: 'container=first-run-task-definition,tag=latest'
-          family: 'web-server-task-service'
+          container-image-name-updates: 'container=web-server-task,tag=latest'
+          family: 'first-run-task-definition'
           
 workflows:
   # Below is the definition of your workflow.
