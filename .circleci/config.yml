@@ -43,7 +43,7 @@ jobs:
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
             docker push bendixon89/$IMAGE_NAME:0.1.${CIRCLE_BUILD_NUM}
             
-  update-tesk-definition:
+  update-task-definition:
     docker:
       - image: 'cimg/python:3.9.1'
     steps:
@@ -54,6 +54,20 @@ jobs:
       - aws-ecs/update-task-definition:
           container-image-name-updates: 'container=web-server-task,image-and-tag=bendixon89/$IMAGE_NAME:0.1.${CIRCLE_PREVIOUS_BUILD_NUM}'
           family: 'first-run-task-definition'
+  
+  update-tag:
+    docker:
+      - image: 'cimg/python:3.9.1'
+    steps:
+      - aws-cli/setup:
+          aws-access-key-id: AWS_SECRET_ACCESS_KEY_ID
+          aws-region: AWS_DEFAULT_REGION
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+      - aws-ecs/update-service:
+          cluster-name: 'default'
+          container-image-name-updates: 'container=first-run-task-definition,tag=latest'
+          family: 'web-server-task-service'
+          
 workflows:
   # Below is the definition of your workflow.
   # Inside the workflow, you provide the jobs you want to run, e.g this workflow runs the build-and-test job above.
@@ -63,7 +77,11 @@ workflows:
     jobs:
       - build-and-test:
           context: DockerTest
-      - update-tesk-definition:
+      - update-task-definition:
           context: DockerTest
           requires:
             - build-and-test
+      - update-tag:
+          context: DockerTest
+          requires:
+            - update-task-definition
