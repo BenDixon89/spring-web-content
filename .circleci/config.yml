@@ -54,8 +54,8 @@ jobs:
   #    - aws-ecs/update-task-definition:
   #        container-image-name-updates: 'container=web-server-task,image-and-tag=bendixon89/$IMAGE_NAME:0.1.${CIRCLE_PREVIOUS_BUILD_NUM}'
   #        family: 'first-run-task-definition'
-  
-  update-tag:
+
+  deploy-to-AWS:
     docker:
       - image: 'cimg/python:3.9.1'
     steps:
